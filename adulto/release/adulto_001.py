@@ -3,7 +3,7 @@ Programa adulto
 Descrição: Este programa pergunta a idade de uma pessoa.
 Se a idade for maior do que 18 anos, o programa imprime
 na tela o texto "Oi! Você e um adulto."
-Autor: Nelson
+Autor: Felipe
 Data: 24/03/2026
 Versão: 0.0.1
 """
