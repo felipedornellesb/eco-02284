@@ -1,51 +1,38 @@
 """
-Programa ETTJ
-Descrição: Este programa lê os dados da ETTJ pré da ANBIMA e traça o gráfico
-da curva de juros usando interpolação polinomial. Versão usando programação modular.
-Autor: Felipe Dornelles
-Data: 06/05/2026
-Versão: 1.0.0
+Programa main.py
+Descrição:
+Este programa lê os dados da ETTJ Pré da ANBIMA e traça o gráfico da
+curva de juros usando interpolação polinomial.
+Autor: Felipe Dornelles Brasil
+Versão: 1.0.1
 """
-# Corrige o caminho de importação
-import sys, os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-# Importação de bibliotecas
 import matplotlib.pyplot as plt
+import numpy as np
 import es
 import interpol
 
+
 def main():
-    # Alocação de memória
-    vertices: list = []
-    taxas: list = []
-    x_interp: list = []
-    y_interp: list = []
+    vertices, taxas = es.ler_curva_pre()
+    xs, ys = interpol.interpolar_curva(vertices, taxas)
 
-    # Entrada de dados
-    vertices, taxas = es.ler_curva('CurvaZero_.csv')
+    v = np.asarray(vertices, dtype=float) / 252
+    x = xs / 252
 
-    # Processamento
-    x_interp, y_interp = interpol.interpolar(vertices, taxas)
+    fig, ax = plt.subplots(figsize=(10, 5))
+    ax.plot(x, ys, color="#1a5fa8", lw=2.2, label="Curva interpolada")
+    ax.scatter(v, taxas, color="#e63946", s=28, zorder=5, label="Pontos")
 
-    # Saída (terminal)
-    print('Vertices (d.u.) | Taxa (% a.a.)')
-    print('-' * 35)
-    for v, t in zip(vertices, taxas):
-        print(f'{v:>15.0f} | {t:.4f}')
+    ax.set_xlabel("Prazo (anos)")
+    ax.set_ylabel("Taxa (% a.a.)")
+    ax.set_title("ETTJ Pré — ANBIMA")
+    ax.grid(True, alpha=0.25)
+    ax.legend(frameon=False)
 
-    # Saída (gráfico)
-    plt.figure()
-    plt.plot(x_interp, y_interp, '-', label='Spline Cúbico')
-    plt.plot(vertices, taxas, 'o', label='Dados ANBIMA')
-    plt.title('ETTJ Prefixada - ANBIMA')
-    plt.xlabel('Vértice (dias úteis)')
-    plt.ylabel('Taxa (% a.a.)')
-    plt.legend()
-    plt.grid(True)
-    plt.savefig('curva_ettj.png')
+    plt.tight_layout()
     plt.show()
 
-# Executar
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
