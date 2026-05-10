@@ -1,34 +1,15 @@
 """
-Módulo ES (Entrada/Saída)
-Descrição: Lê os dados da ETTJ prefixada do arquivo CSV da ANBIMA.
-Autor: Felipe Dornelles
-Data: 06/05/2026
+Programa es.py
+Descrição:
+Este módulo contém os dados da ETTJ Pré da ANBIMA.
+Autor: Felipe Dornelles Brasil
 Versão: 1.0.0
 """
-import numpy as np
 
-def ler_curva(arquivo='CurvaZero_.csv'):
-    with open(arquivo, 'r', encoding='latin-1') as f:
-        linhas = f.readlines()
-    inicio = None
-    for i, linha in enumerate(linhas):
-        if 'PREFIXADOS' in linha.upper() and 'CIRCULAR' in linha.upper():
-            inicio = i
-            break
-    vertices, taxas = [], []
-    for j in range(inicio + 2, len(linhas)):
-        linha = linhas[j].strip()
-        if not linha or linha == ';' or 'ERRO' in linha.upper():
-            if vertices:
-                break
-            continue
-        partes = linha.split(';')
-        if len(partes) >= 2:
-            try:
-                v = float(partes[0].replace('.', ''))
-                t = float(partes[1].replace(',', '.'))
-                vertices.append(v)
-                taxas.append(t)
-            except ValueError:
-                continue
-    return np.array(vertices), np.array(taxas)
+def ler_curva_pre():
+    vertices = [126, 252, 378, 504, 630, 756, 882, 1008, 1134, 1260, 1386, 1512,
+                1638, 1764, 1890, 2016, 2142, 2268, 2394, 2520, 2646]
+    taxas = [13.9754, 13.7070, 13.5843, 13.5489, 13.5633, 13.6036, 13.6553,
+             13.7095, 13.7610, 13.8072, 13.8469, 13.8797, 13.9060, 13.9262,
+             13.9410, 13.9511, 13.9571, 13.9597, 13.9593, 13.9566, 13.9520]
+    return vertices, taxas
